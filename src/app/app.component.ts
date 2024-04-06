@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { OpenAiService } from "./open-ai.service";
 
 @Component({
@@ -9,7 +9,7 @@ import { OpenAiService } from "./open-ai.service";
 })
 export class AppComponent implements OnInit {
   title = "dju";
-  vibeText = new FormControl("");
+  vibeText = new UntypedFormControl("");
   constructor(private ai: OpenAiService) {}
 
   ngOnInit(): void {}
