@@ -3,8 +3,14 @@
     <div class="inner-container">
         <h2>What are U in the mood for?</h2>
         <div class="text-wrap">
-            <input [formControl]="vibeText" />
+            <input
+                [placeholder]="placeholder$|async"
+                [formControl]="vibeText"
+            />
         </div>
         <button (click)="getSuggestions()">Suggest</button>
+        @if(sugg) {
+        <div class="sugg-container">{{sugg}}</div>
+        }
     </div>
 </div>

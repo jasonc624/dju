@@ -1,15 +1,21 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Injectable, inject } from "@angular/core";
+// import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { Functions, httpsCallableData } from "@angular/fire/functions";
+
 @Injectable({
   providedIn: "root",
 })
 export class OpenAiService {
   private apiUrl = "https://suggestions-wiunq7jl7q-uc.a.run.app";
+  private functions: Functions = inject(Functions);
 
   constructor(private http: HttpClient) {}
 
-  public fetchData(data: { text: string }): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  public fetchData(data: { text: string }): any {
+    const getSuggestions = httpsCallableData(this.functions, "suggestions", {
+      timeout: 3_000,
+    });
+    return getSuggestions(data);
   }
 }

@@ -40,7 +40,16 @@ button {
     font-weight: bolder;
     border-radius: 12px;
     margin-top: 15px;
+    margin-bottom: 15px;
     &:active {
         borderd: 1px solid #000;
     }
+}
+.sugg-container {
+    font-size: 24px;
+    font-family: sans-serif;
+    padding: 24px;
+    background: #e8e8e8;
+    color: #9f21a4;
+    borderd: 1px solid #000;
 }
