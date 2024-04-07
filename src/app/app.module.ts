@@ -29,7 +29,13 @@ import {
   getRemoteConfig,
   provideRemoteConfig,
 } from "@angular/fire/remote-config";
+import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
+import { MatButtonModule } from "@angular/material/button";
+let resolvePersistenceEnabled: (enabled: boolean) => void;
 
+export const persistenceEnabled = new Promise<boolean>((resolve) => {
+  resolvePersistenceEnabled = resolve;
+});
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -38,6 +44,7 @@ import {
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    MatButtonModule,
     provideFirebaseApp(() =>
       initializeApp({
         projectId: "dj-u-b5c03",
@@ -64,7 +71,12 @@ import {
     provideStorage(() => getStorage()),
     provideRemoteConfig(() => getRemoteConfig()),
   ],
-  providers: [OpenAiService, ScreenTrackingService, UserTrackingService],
+  providers: [
+    OpenAiService,
+    ScreenTrackingService,
+    UserTrackingService,
+    provideAnimationsAsync(),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

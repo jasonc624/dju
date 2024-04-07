@@ -1,16 +1,14 @@
 <nav></nav>
 <div class="app-wrap">
     <div class="inner-container">
-        <h2>What are U in the mood for?</h2>
-        <div class="text-wrap">
-            <input
-                [placeholder]="placeholder$|async"
-                [formControl]="vibeText"
-            />
+        <div class="view-selector">
+            <button color="primary" mat-raised-button [routerLink]="['dj']">
+                I am a DJ
+            </button>
+            <button color="accent" mat-raised-button [routerLink]="['request']">
+                I am a Patron
+            </button>
         </div>
-        <button (click)="getSuggestions()">Suggest</button>
-        @if(sugg) {
-        <div class="sugg-container">{{sugg}}</div>
-        }
+        <router-outlet></router-outlet>
     </div>
 </div>

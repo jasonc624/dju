@@ -1,0 +1,5 @@
+<h2>What are U in the mood for?</h2>
+<div class="text-wrap">
+  <input [placeholder]="placeholder$ | async" [formControl]="vibeText" />
+</div>
+<button (click)="sendSuggestion()">Request!</button>

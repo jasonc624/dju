@@ -1,0 +1,36 @@
+@if(!sessionUrl){
+<button mat-raised-button style="margin: 24px auto" (click)="createSession()">
+  Start Session
+</button>
+}
+<div class="qr-and-requests">
+  @if (sessionUrl) {
+  <div class="qr-container">
+    <app-qrcode [qrString]="sessionUrl" />
+    <a [href]="sessionUrl">{{ sessionUrl }}</a>
+  </div>
+  } @if(song_requests; as reqs){
+  <div class="request-container">
+    <h2>Queue</h2>
+    <ul>
+      @for (r of reqs; track $index) {
+      <li>
+        <mat-icon>graphic_eq</mat-icon>
+        <div style="flex-grow: 1">
+          <div class="name">
+            {{ r.song + " " + r.artist }}
+          </div>
+          <div class="requester">Requested by {{ r.user }}</div>
+          <br />
+          <div class="amount">{{ r.amount / 100 | currency }}</div>
+        </div>
+        <div class="decide">
+          <button color="primary" mat-raised-button>Queue</button>
+          <button mat-raised-button>Deny</button>
+        </div>
+      </li>
+      }
+    </ul>
+  </div>
+  }
+</div>

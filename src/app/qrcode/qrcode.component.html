@@ -1,0 +1,9 @@
+<qrcode
+    id="qr"
+    *ngIf="qrString"
+    [qrdata]="qrString"
+    [width]="256"
+    [elementType]="'svg'"
+    [errorCorrectionLevel]="'M'"
+></qrcode>
+<p>Visit to submit your request</p>

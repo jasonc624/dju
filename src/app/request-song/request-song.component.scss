@@ -1,0 +1,43 @@
+button {
+    background: yellow;
+    color: #000;
+    width: 250px;
+    padding: 18px;
+    font-size: 24px;
+    border: 4px solid #000;
+    font-weight: bolder;
+    border-radius: 12px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    &:active {
+        borderd: 1px solid #000;
+    }
+}
+.sugg-container {
+    font-size: 24px;
+    font-family: sans-serif;
+    padding: 24px;
+    background: #e8e8e8;
+    color: #9f21a4;
+    borderd: 1px solid #000;
+}
+    h2 {
+        color: #fff;
+        font-size: 36px;
+        font-family: sans-serif;
+        margin-bottom: 24px;
+    }
+    .text-wrap {
+        border-radius: 12px;
+        border: 2px solid #000;
+        background: #fff;
+        padding: 8px;
+        textarea,
+        input {
+            width: 100%;
+            height: 100%;
+            font-size: 24px;
+            border: none;
+            outline: none;
+        }
+    }
