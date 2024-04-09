@@ -3,9 +3,14 @@
   Start Session
 </button>
 }
+<h2>
+  Currently playing
+  {{ currentSession?.current_song_play || "Photograph - Nickelback" }}
+</h2>
 <div class="qr-and-requests">
   @if (sessionUrl) {
   <div class="qr-container">
+    <h2>Scan Me!</h2>
     <app-qrcode [qrString]="sessionUrl" />
     <a [href]="sessionUrl">{{ sessionUrl }}</a>
   </div>
@@ -14,19 +19,47 @@
     <h2>Queue</h2>
     <ul>
       @for (r of reqs; track $index) {
-      <li>
+      <li *ngIf="r?.isAccepted" [ngClass]="{ isSuggested: r.isSuggested }">
         <mat-icon>graphic_eq</mat-icon>
         <div style="flex-grow: 1">
           <div class="name">
-            {{ r.song + " " + r.artist }}
+            {{ r.song }} <span *ngIf="r?.artist">{{ r?.artist }}</span>
+          </div>
+          <div class="requester">Requested by {{ r.user }}</div>
+          <br />
+          <div class="amount">{{ r.amount / 100 | currency }}</div>
+        </div>
+        <div class="decide" *ngIf="!r.isAccepted">
+          <button color="primary" mat-raised-button>Queue</button>
+          <button mat-raised-button>Deny</button>
+        </div>
+      </li>
+      }
+    </ul>
+    <h2>Requests</h2>
+    <ul>
+      @for (r of reqs; track $index) {
+      <li *ngIf="!r?.isAccepted">
+        <mat-icon>graphic_eq</mat-icon>
+        <div style="flex-grow: 1">
+          <div class="name">
+            {{ r.song }} <span *ngIf="r?.artist">{{ r?.artist }}</span>
           </div>
           <div class="requester">Requested by {{ r.user }}</div>
           <br />
           <div class="amount">{{ r.amount / 100 | currency }}</div>
         </div>
         <div class="decide">
-          <button color="primary" mat-raised-button>Queue</button>
-          <button mat-raised-button>Deny</button>
+          <button
+            color="primary"
+            mat-raised-button
+            (click)="addToActualQueue(r)"
+          >
+            Queue
+          </button>
+          <button (click)="removeFromActualQueue(r)" mat-raised-button>
+            Deny
+          </button>
         </div>
       </li>
       }

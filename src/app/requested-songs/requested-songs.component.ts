@@ -12,6 +12,7 @@ import {
   docData,
   Firestore,
   setDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { QrcodeComponent } from '../qrcode/qrcode.component';
 import { Observable } from 'rxjs';
@@ -27,6 +28,14 @@ export class RequestedSongsComponent implements OnInit {
   song_requests$: any | Observable<any>;
   song_requests: any;
   sessionUrl: string | undefined | null = null;
+  currentSession: any;
+  sessionId: any;
+  suggested = [
+    { song: 'Bad and Bougie', artis: 'Migos' },
+    { song: 'Radioactive', artist: 'Imagine Dragons' },
+    { song: 'Its not my time', artis: '3 Doors down' },
+  ];
+
   constructor(
     private firestore: Firestore,
     private activeRoute: ActivatedRoute,
@@ -41,11 +50,17 @@ export class RequestedSongsComponent implements OnInit {
       console.log('subscribingn', params.id);
       if (params.id) {
         console.log('subscribingn', params.id);
+        this.sessionId = params.id;
         this.sessionUrl = location.host + '/session/request/' + params.id;
+        this.getSession(params.id).subscribe((session) => {
+          console.log('session', session);
+          this.currentSession = session;
+        });
         this.subscribeToNewlyCreatedSession(params.id);
       }
     });
   }
+
   generateGuid(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
       /[xy]/g,
@@ -56,7 +71,28 @@ export class RequestedSongsComponent implements OnInit {
       }
     );
   }
+  getSession(sessionId: string) {
+    return docData<any>(doc(this.firestore, 'sessions', sessionId));
+  }
+  async addToActualQueue(request: any) {
+    const path = `sessions/${request.sessionId}/requests/${request.id}`;
 
+    await updateDoc(doc(this.firestore, path), {
+      isAccepted: true,
+    });
+    this.suggested.forEach((sugg) => {
+      this.sendSuggestion(sugg.song);
+    });
+  }
+
+  async removeFromActualQueue(request: any) {
+    console.log('remove');
+    const path = `sessions/${request.sessionId}/requests/${request.id}`;
+
+    await updateDoc(doc(this.firestore, path), {
+      isAccepted: false,
+    });
+  }
   async createSession() {
     const sessionId = this.generateGuid();
     // Visit this session to persist the djs created
@@ -68,6 +104,23 @@ export class RequestedSongsComponent implements OnInit {
     this.sessionUrl = location.host + '/session/request/' + sessionId;
     this.router.navigate(['session', sessionId]);
   }
+  async sendSuggestion(songName: string) {
+    const payload = {
+      isSuggested: true,
+      song: songName,
+      amount: 500,
+      user: 'Reese Kelsey',
+      created: new Date(),
+      id: this.generateGuid(),
+      isAccepted: true,
+      sessionId: this.sessionId,
+    };
+    await setDoc(
+      doc(this.firestore, `sessions/${this.sessionId}/requests/${payload.id}`),
+      payload
+    ).catch((err) => console.error('failed to send', err));
+  }
+
   subscribeToNewlyCreatedSession(sessionId: string) {
     collectionData<any>(
       collection(this.firestore, `sessions/${sessionId}/requests`)

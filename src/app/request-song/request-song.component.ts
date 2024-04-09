@@ -62,6 +62,8 @@ export class RequestSongComponent {
       amount: 500,
       user: 'Reese Kelsey',
       created: new Date(),
+      id: this.generateGuid(),
+      sessionId: this.sessionId,
     };
     this.ai.parseSongName(payload.song).subscribe({
       next: async (res: any) => {
@@ -72,13 +74,21 @@ export class RequestSongComponent {
         await setDoc(
           doc(
             this.firestore,
-            `sessions/${this.sessionId}/requests/${this.generateGuid()}`
+            `sessions/${this.sessionId}/requests/${newPayload.id}`
           ),
           newPayload
         ).catch((err) => console.error('failed to send', err));
       },
-      error: (err) => {
+      error: async (err) => {
         console.log('failed to normalize song', err);
+        // If it fails it will still be requested
+        await setDoc(
+          doc(
+            this.firestore,
+            `sessions/${this.sessionId}/requests/${payload.id}`
+          ),
+          payload
+        ).catch((err) => console.error('failed to send', err));
       },
     });
   }

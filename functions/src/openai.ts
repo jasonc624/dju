@@ -7,7 +7,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   organization: 'org-x7bVMfUykE8aXiaziu65WQdn',
-  apiKey: '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',
+  apiKey: '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',
 });
 
 export async function main(data: { text: string }) {
